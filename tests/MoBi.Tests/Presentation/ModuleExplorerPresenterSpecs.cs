@@ -280,6 +280,30 @@ namespace MoBi.Presentation
       }
    }
 
+   public class When_a_building_block_is_added_without_a_module_parent : concern_for_ModuleExplorerPresenter
+   {
+      private ParameterValuesBuildingBlock _buildingBlock;
+      private MoBiProject _project;
+
+      protected override void Context()
+      {
+         base.Context();
+         _buildingBlock = new ParameterValuesBuildingBlock();
+         _project = DomainHelperForSpecs.NewProject();
+      }
+
+      protected override void Because()
+      {
+         sut.Handle(new AddedEvent(_buildingBlock, _project));
+      }
+
+      [Observation]
+      public void should_ignore_the_event()
+      {
+         A.CallTo(() => _view.NodeById(A<string>._)).MustNotHaveHappened();
+      }
+   }
+
    public class When_the_module_explorer_presenter_receives_an_added_module_event : When_the_module_explorer_presenter_receives_an_added_event<Module>
    {
       private ITreeNode _rootNode;

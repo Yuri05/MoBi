@@ -357,8 +357,7 @@ namespace MoBi.Presentation.Presenter.Main
       {
          switch (eventToHandle.AddedObject)
          {
-            case IBuildingBlock buildingBlock:
-               var module = eventToHandle.Parent as Module;
+            case IBuildingBlock buildingBlock when eventToHandle.Parent is Module module:
                addBuildingBlockToModule(buildingBlock, module);
                refreshModuleIcon(module);
                break;
@@ -406,7 +405,15 @@ namespace MoBi.Presentation.Presenter.Main
 
       private void refreshModuleIcon(Module module)
       {
-         _view.NodeById(module.Id).Icon = ApplicationIcons.IconByName(module.Icon);
+         if (module == null)
+            return;
+
+         var moduleNode = _view.NodeById(module.Id);
+
+         if (moduleNode == null)
+            return;
+
+         moduleNode.Icon = ApplicationIcons.IconByName(module.Icon);
       }
 
       public void Handle(BulkUpdateStartedEvent eventToHandle)
