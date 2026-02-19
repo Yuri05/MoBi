@@ -959,4 +959,31 @@ namespace MoBi.Presentation
          sut.OrderingComparisonForModules(_modulesRoot, _buildingBlock).ShouldBeEqualTo(-1);
       }
    }
+
+   public class When_handling_added_event_with_null_parent_module : concern_for_ModuleExplorerPresenter
+   {
+      private MoBiSpatialStructure _buildingBlock;
+      private MoBiProject _project;
+
+      protected override void Context()
+      {
+         base.Context();
+         _buildingBlock = new MoBiSpatialStructure();
+         _project = new MoBiProject();
+      }
+
+      protected override void Because()
+      {
+         // This simulates the SBML import scenario where a building block is added
+         // with a parent that is not a Module (e.g., null or another type)
+         sut.Handle(new AddedEvent(_buildingBlock, null));
+      }
+
+      [Observation]
+      public void should_not_throw_null_reference_exception()
+      {
+         // If we get here without an exception, the test passes
+         // The fix ensures that null module is handled gracefully
+      }
+   }
 }

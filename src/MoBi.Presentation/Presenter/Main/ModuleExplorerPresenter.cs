@@ -324,6 +324,9 @@ namespace MoBi.Presentation.Presenter.Main
 
       private void addBuildingBlockToModule(IBuildingBlock buildingBlock, Module module)
       {
+         if (module == null)
+            return;
+
          var moduleNode = folderNodeForBuildingBlock(buildingBlock, module);
 
          addBuildingBlockUnderNode(buildingBlock, moduleNode);
@@ -360,7 +363,8 @@ namespace MoBi.Presentation.Presenter.Main
             case IBuildingBlock buildingBlock:
                var module = eventToHandle.Parent as Module;
                addBuildingBlockToModule(buildingBlock, module);
-               refreshModuleIcon(module);
+               if (module != null)
+                  refreshModuleIcon(module);
                break;
          }
       }
